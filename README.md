@@ -9,8 +9,10 @@
 
 **publico alvo:** jogadores de jogo da velha.
 
-**autoe:** Bruno Akira Furumori
+**autor:** Bruno Akira Furumori
 
 **ultima atualização:**29/04/2024
+
+
 
 # Sem previsão de entrega. 
