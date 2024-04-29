@@ -11,4 +11,6 @@
 
 **autoe:** Bruno Akira Furumori
 
+**ultima atualização:**29/04/2024
+
 # Sem previsão de entrega. 
