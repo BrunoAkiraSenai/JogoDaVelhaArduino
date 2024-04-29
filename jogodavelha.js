@@ -76,7 +76,7 @@
         // Verificar jogada vencedora nas linhas
     } while (resultadoValidaTabuleiro == 0 && velha <= 9);
     if (resultadoValidaTabuleiro == 2) {
-        console.log ("O vencedor do jogo foi o JOGADOR " + jogadorDaVez);
+        console.log ("O vencedor doo jogo foi o JOGADOR " + jogadorDaVez);
     } else {
         console.log ("velha!!");
     }
