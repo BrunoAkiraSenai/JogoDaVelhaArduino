@@ -1,166 +1,149 @@
-﻿int velha; 
-int linha;
+﻿int linha;
 int coluna;
-bool haVencedor;
-int tabuleiro[9];
-int index;
-  
-  void setup() {
-   
-  Serial.begin(9600);
-  for (int linha = 0; linha <= 2; linha++){
-  for(int coluna= 0; coluna <= 2; coluna++){
-    tabuleiro[linha][coluna] = 0;
+bool haVencedor = false;
+int jogadorDaVez = 1;
+int velha = 1;
+int j;
+
+//criação do tabuleiro
+int tabuleiro[3][3] = {
+  { 0, 0, 0 },
+  { 0, 0, 0 },
+  { 0, 0, 0 }
+};
+
+//função para verificar se a jogada é valida ou não
+boolean verificarJogada(int linha, int coluna) {
+  boolean jogadaValida = false;
+  if (linha == 0 || linha == 1 || linha == 2) {
+    if (coluna == 0 || coluna == 1 || coluna == 2) {
+      jogadaValida = true;
+    }
   }
- }
-  for(int linha = 0; linha <=2 ; linha++){
-    if(linha == 1 | linha == 2)
+  return jogadaValida;
+}
+
+void setup() {
+  Serial.begin(9600);
+
+  //zerador detabuleiro
+  for (int linha = 0; linha <= 2; linha++) {
+    for (int coluna = 0; coluna <= 2; coluna++) {
+      tabuleiro[linha][coluna] = 0;
+    }
+  }
+
+//onde escreve o tabuleiro no serial
+  for (int linha = 0; linha <= 2; linha++) {
+    if (linha == 1 | linha == 2) {
+      Serial.println("");
+    }
+    for (int coluna = 0; coluna <= 2; coluna++) {
+      Serial.print(tabuleiro[linha][coluna]);
+    }
+  }
   Serial.println("");
- }
- for(int coluna = 0;coluna<=2 ; coluna++){
-  Serial.println(tabuleiro[linha][coluna]);
- }
-  
- Serial.println("");
- Serial.println("digite sua jogada");
+  Serial.print("Digite sua jogada jogador");
+  Serial.println(jogadorDaVez);
 }
+
+
 void loop() {
+  haVencedor = false;
 
-
-    haVencedor = false;
-  
-    // Limpar/zerar o tabuleiro
-    
-
-    for (index = 0; index <= 8; index++) {
-        tabuleiro[index] = 0;
+ //zerador detabuleiro
+  for (int linha = 0; linha <= 2; linha++) {
+    for (int coluna = 0; coluna <= 2; coluna++) {
+      tabuleiro[linha][coluna] = 0;
     }
-    string jogada;
+  }
 
-    // Iniciar o jogo, definir quem joga primeiro
-    int jogadorDaVez;
+//onde escreve o tabuleiro no serial
+  for (int linha = 0; linha <= 2; linha++) {
+    if (linha == 1 | linha == 2) {
+      Serial.println("");
+    }
+    for (int coluna = 0; coluna <= 2; coluna++) {
+      Serial.print(tabuleiro[linha][coluna]);
+    }
+  }
 
-    jogadorDaVez = 1;
 
-    // Anotar/Registrar a jogada, do primeiro jogador
-    velha = 1;
-    // Limpar/zerar o tabuleiro
-   
- 
+  do {
+    while (!Serial.available())
+      ;
 
+    String entrada = Serial.readString();
+    Serial.println("");
+    Serial.println(entrada);
 
- 
+    linha = entrada.substring(0, 1).toInt();
+    coluna = entrada.substring(2, 3).toInt();
 
-    // Anotar/Registrar a jogada, do primeiro jogador
-  
-          
-            // Converter a jogada texto em dois inteiros linha e coluna.
-            // Simula a função Serial.parseInt() do Arduino
-            linha = toInt(jogada[0]);
+    if (verificarJogada(linha, coluna) == true) {
+      if (tabuleiro[linha][coluna] == 0) {
+        tabuleiro[linha][coluna] = jogadorDaVez;
 
-            // CORRIGIR O ERRO DE DIGITAÇÃO
-            coluna = toInt(jogada[2]);
-            Serial.println ("Linha: "  linha  "; Coluna: "  coluna)  ;
-
-            // Verificar se a posição 'jogada' é valida
-            if (tabuleiro[3 * linha + coluna] == 0) {
-                tabuleiro[3 * linha + coluna] = jogadorDaVez;
-                if (tabuleiro[0] == jogadorDaVez && tabuleiro[1] == jogadorDaVez && tabuleiro[2] == jogadorDaVez || tabuleiro[3] == jogadorDaVez && tabuleiro[4] == jogadorDaVez && tabuleiro[5] == jogadorDaVez || tabuleiro[6] == jogadorDaVez && tabuleiro[7] == jogadorDaVez && tabuleiro[8] == jogadorDaVez) {
-                    haVencedor = true;
-                } else {
-
-                    // Verificar a jogada vencedora nas colunas.
-                    if (tabuleiro[0] == jogadorDaVez && tabuleiro[3] == jogadorDaVez && tabuleiro[6] == jogadorDaVez || tabuleiro[1] == jogadorDaVez && tabuleiro[4] == jogadorDaVez && tabuleiro[7] == jogadorDaVez || tabuleiro[2] == jogadorDaVez && tabuleiro[5] == jogadorDaVez && tabuleiro[8] == jogadorDaVez) {
-                        haVencedor = true;
-                    } else {
-
-                        // Verificar a jogada vencedora nas diagonais.
-                        if (tabuleiro[0] == jogadorDaVez && tabuleiro[4] == jogadorDaVez && tabuleiro[8] == jogadorDaVez || tabuleiro[2] == jogadorDaVez && tabuleiro[4] == jogadorDaVez && tabuleiro[6] == jogadorDaVez) {
-                            haVencedor = true;
-                        } else {
-
-                            // Trocar o jogador
-                            if(jogadorDaVez == 1){
-                                jogadorDaVez = 2;
-                            } else {
-                                jogadorDaVez = 1;
-                            }
-                        }
-                    }
-                }
-                velha = velha + 1;
-            } else {
-                Serial.println("Posição ocupada, jogue novamente !!!");
-
-                // Informar ao Jogador 1 que a posição está preenchida, é inválida e ele precisa informar um posição válida.
-            }
-        } else {
-            Serial.println ( "Jogada inválida !!!");
+        //zera a matriz do tabuleiro
+        for (int linha = 0; linha <= 2; linha++) {
+          if (linha == 1 || linha == 2) {
+            Serial.println("");
+          }
+          for (int coluna = 0; coluna <= 2; coluna++) {
+            Serial.print(tabuleiro[linha][coluna]);
+          }
         }
 
-        // Verificar a jogada vencedora nas linhas.
-     while (!haVencedor && velha <= 9);
-
-    // Verificar o tabuleiro, se houve ganhador ou empate, finalizar o jogo.
-    if (haVencedor) {
-        Serial.println("Parabéns pela a vitória, jogador " && jogadorDaVez);
+       //verifica as jogadas nas linhas,colunas e diagonal
+        if ((tabuleiro[0][0] == jogadorDaVez && tabuleiro[0][1] == jogadorDaVez && tabuleiro[0][2] == jogadorDaVez) || (tabuleiro[1][0] == jogadorDaVez && tabuleiro[1][1] == jogadorDaVez && tabuleiro[1][2] == jogadorDaVez) || (tabuleiro[2][0] == jogadorDaVez && tabuleiro[2][1] == jogadorDaVez && tabuleiro[2][2] == jogadorDaVez) || (tabuleiro[0][0] == jogadorDaVez && tabuleiro[1][0] == jogadorDaVez && tabuleiro[2][0] == jogadorDaVez) || (tabuleiro[0][1] == jogadorDaVez && tabuleiro[1][1] == jogadorDaVez && tabuleiro[2][1] == jogadorDaVez) || (tabuleiro[0][2] == jogadorDaVez && tabuleiro[1][2] == jogadorDaVez && tabuleiro[2][2] == jogadorDaVez) || (tabuleiro[0][0] == jogadorDaVez && tabuleiro[1][1] == jogadorDaVez && tabuleiro[2][2] == jogadorDaVez) || (tabuleiro[0][2] == jogadorDaVez && tabuleiro[1][1] == jogadorDaVez && tabuleiro[2][0] == jogadorDaVez)) {
+          haVencedor = true;
+          j = 1;
+        }
+      
+      //troca de jogadores
+        if (jogadorDaVez == 1 && haVencedor == false) {
+          jogadorDaVez = 2;
+        } else if (jogadorDaVez == 2 && haVencedor == false) {
+          jogadorDaVez = 1;
+        }
+        
+        //contador de velha
+        velha = velha + 1;
+        Serial.print("\nContagem velha=");
+        Serial.println(velha);
+        //Serial.println("");
+        Serial.print("Faca sua jogada jogador");
+        Serial.println(jogadorDaVez);
+    
+    //quando o lugar da jogada estiver ocupado 
+      } else {
+        Serial.println("Posicao ocupada.");
+        Serial.print("Jogue novamente jogador");
+        Serial.println(jogadorDaVez);
+      }
+    //quando a jogada for invalida
     } else {
-        Serial.println("Deu VELHA!!!");
+
+      Serial.println("Jogada invalida.");
+      Serial.print("Jogue novamente jogador");
+      Serial.println(jogadorDaVez);
     }
-      {
-    Serial.print(tabuleiro[0]);
-    Serial.print(tabuleiro[1]);
-    Serial.print(tabuleiro[2]);
-    Serial.print(tabuleiro[3]);
-    Serial.print(tabuleiro[4]);
-    Serial.print(tabuleiro[5]);
-    Serial.print(tabuleiro[6]);
-    Serial.print(tabuleiro[7]);
-    Serial.print(tabuleiro[8]);
 
-    return 0;
-}
-
-int getValArrayInt(int linha, int coluna, int matriz[], int qtdeLinhas) {
-    int valor;
-
-    valor = matriz[qtdeLinhas * linha + coluna];
-    
-    return valor;
-}
-
-bool validaPosicao(string entrada) {
-    bool entradaValida;
-
-    entradaValida = false;
-    Serial.println(entrada.length());
-    if (entrada.length() == 3) {
-        Serial.println("Comprimento da string igual  3");
-        if (entrada[0] == "0" || entrada[0] == "1" || entrada[0] == "2") {
-            Serial.println(entrada[0])  ;
-            if (entrada[2] == "0" || entrada[2] == "1" || entrada[2] == "2") {
-                Serial.println(entrada[2]);
-                entradaValida = true;
-            }
-            }
-        }
-    }
-    
-    return entradaValida;
-
-
-// The following implements type conversion functions.
-string toString (double value) { //int also
-    stringstream temp;
-    temp  value;
-    return temp.str();
-  
-}
-
-int toInt (string text) {
-    return atoi(text.c_str());
-}
-
-double toDouble (string text) {
-    return atof(text.c_str());
+  //enquanto haVencedor não for diferente e velha <9 vai voltar diretamento para o (do)
+  } while (!haVencedor && velha <= 9);
+  if (velha == 9) {
+    j = 2;
+  }
+  switch (j) {
+    case 1:
+      Serial.print("voce venceu ");
+      Serial.print(jogadorDaVez);
+      Serial.println("");
+      velha = 1;
+      break;
+    case 2:
+      Serial.println("velha!!");
+      velha = 1;
+      break;
+  }
 }
